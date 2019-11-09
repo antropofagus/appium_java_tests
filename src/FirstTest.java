@@ -317,6 +317,37 @@ public class FirstTest {
                 article_title_opened_from_list);
     }
 
+    @Test
+    public void testArticleTitleIsPresent() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Can`t find 'Search Wikipedia' input",
+                5
+        );
+
+        String search_word = "Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text,'Search…')]"),
+                "Can`t find search input",
+                search_word,
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']"),
+                "Can`t find 'Object-oriented programming language' article",
+                5
+        );
+
+        assertElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "article title is not present"
+        );
+    }
+
+    private boolean assertElementPresent(By by, String error_message) {
+        return driver.findElements(by).size() > 0;
+    }
 
     private boolean checkAllSearchResultsContainTheSubstring(List<WebElement> search_results, String search_substring) {
             for(WebElement element : search_results)
@@ -326,7 +357,6 @@ public class FirstTest {
             }
             return true;
     }
-
 
     private WebElement waitForElementPresent(By by, String error_message, long timeout) {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
