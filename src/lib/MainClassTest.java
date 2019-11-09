@@ -17,4 +17,12 @@ public class MainClassTest extends MainClass{
         int actual_class_number = getClassNumber();
         Assert.assertTrue("Expected that " + actual_class_number + " is more then 45", getClassNumber() > 45);
     }
+
+    @Test
+    public void testGetClassString() {
+        String actual_class_string = getClassString();
+        Assert.assertTrue(
+                "Expected that " + "'" + actual_class_string+ "'" + " contains 'hello' or 'Hello'",
+                actual_class_string.contains("Hello") | actual_class_string.contains("hello") );
+    }
 }
