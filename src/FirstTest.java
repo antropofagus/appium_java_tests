@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.List;
 
 public class FirstTest {
-    private AppiumDriver driver;
+    private AppiumDriver<WebElement> driver;
 
     @Before
     public void setUp() throws Exception {
@@ -28,7 +28,7 @@ public class FirstTest {
         capabilities.setCapability("appActivity", ".main.MainActivity");
         capabilities.setCapability("appPackage", "org.wikipedia");
 
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
 
     @After
@@ -83,7 +83,7 @@ public class FirstTest {
                 "Can`t find 'x' button",
                 5
         );
-        Assert.assertTrue("search result is still visivle",
+        Assert.assertTrue("search result is still visible",
                 waitForElementNotPresent(
                     By.id("org.wikipedia:id/fragment_search_results"),
                     "Search results are still visible",
@@ -91,6 +91,45 @@ public class FirstTest {
             )
         );
     }
+
+    @Test
+    public void testSearchResultsAreRelevant()
+    {
+        String search_string = "Java";
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text,'Search…')]"),
+                "Cannot find search input",
+                search_string,
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Cannot find search results",
+                5
+        );
+
+        List<WebElement> search_results = driver.findElements(By.id("org.wikipedia:id/page_list_item_title"));
+        Assert.assertTrue("Not all search results are relevant", checkAllSearchResultsContainTheSubstring(search_results, search_string));
+
+    }
+
+    private boolean checkAllSearchResultsContainTheSubstring(List<WebElement> search_results, String search_substring) {
+            for(WebElement element : search_results)
+            {
+                if(!element.getText().contains(search_substring))
+                    return false;
+            }
+            return true;
+    }
+
 
     private WebElement waitForElementPresent(By by, String error_message, long timeout) {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
