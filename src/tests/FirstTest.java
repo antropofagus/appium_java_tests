@@ -1,3 +1,5 @@
+package tests;
+
 import lib.CoreTestCase;
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,6 +8,7 @@ import ui.ArticlePageObject;
 import ui.NavigationUI;
 import ui.ReadingListsPageObject;
 import ui.SearchPageObject;
+
 import java.util.List;
 
 public class FirstTest extends CoreTestCase {

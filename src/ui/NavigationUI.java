@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 
 public class NavigationUI extends MainPageObject {
     private static final String
-        READING_LISTS_BUTTON = "//android.widget.FrameLayout[@content-desc='My lists']";
+        READING_LISTS_BUTTON = "xpath://android.widget.FrameLayout[@content-desc='My lists']";
 
     public NavigationUI(AppiumDriver driver) {
         super(driver);
@@ -13,7 +13,7 @@ public class NavigationUI extends MainPageObject {
 
     public void openReadingLists() {
         this.waitForElementAndClick(
-                By.xpath(READING_LISTS_BUTTON),
+                READING_LISTS_BUTTON,
                 "Can`t find navigation button to My lists",
                 15);
     }
