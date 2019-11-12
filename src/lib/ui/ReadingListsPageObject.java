@@ -1,13 +1,15 @@
-package ui;
+package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
 
-public class ReadingListsPageObject extends MainPageObject{
-    public static final String
-        FOLDER_BY_NAME_TPL = "xpath://*[@text='{NAME}']",
-        READING_LIST_ITEM = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']",
-        ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{ARTICLE_TITLE}']";
+import java.util.List;
+
+abstract public class ReadingListsPageObject extends MainPageObject{
+    protected static String
+        FOLDER_BY_NAME_TPL,
+        READING_LIST_ITEM,
+        ARTICLE_BY_TITLE_TPL;
 
     /*TEMPLATE METHODS*/
     private static String getFolderXpathByName(String folder_name) {
@@ -57,6 +59,11 @@ public class ReadingListsPageObject extends MainPageObject{
         this.swipeElementToLeft(
                 article_xpath,
                 "Can`t find saved article with title "+ article_title);
+        if(Platform.getInstance().isIOS()) {
+            this.clickElementToTheRightUpperCorner(
+                    article_xpath,
+                    "can`t find saved article");
+        }
         this.waitForArticleToDisappearByTitle(article_title);
     }
 
@@ -67,4 +74,12 @@ public class ReadingListsPageObject extends MainPageObject{
                 "Can`t find and click article by title " + article_title,
                 15);
     }
+
+    public boolean checkArticleIsExistInSavedList(String article_title) {
+        String article_xpath = getArticleXpathByName(article_title);
+        return this.assertElementPresent(
+                article_xpath,
+                "Can`t find article with title "+ article_title + " in saved list");
+    }
+
 }
